@@ -1,6 +1,9 @@
 package evento_mascota.microservicio_mascota.model;
 
 import java.util.List;
+
+import org.springframework.hateoas.RepresentationModel;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +27,9 @@ import jakarta.validation.constraints.Positive;
 
 @Entity 
 @Table(name = "EventoMascota")
-public class EventoMascota {
+public class EventoMascota extends RepresentationModel<EventoMascota> {
     @Id
-    @NotNull(message = "El ID no puede ser nulo")
+    // @NotNull(message = "El ID no puede ser nulo")
     @Positive(message = "El ID debe ser un número positivo")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
