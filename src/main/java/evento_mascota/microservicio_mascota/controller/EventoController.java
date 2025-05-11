@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel; 
@@ -53,13 +55,23 @@ public class EventoController {
         }
     }
 
+    // @PostMapping
+    // public EntityModel<EventoMascota> createRegistro(@RequestBody EventoMascota mascota) {
+    //     EventoMascota createdEvento = eventoService.createRegistro(mascota);
+    //     EntityModel<EventoMascota> entityModel = EntityModel.of(createdEvento,
+    //             WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EventoController.class).buscarId(createdEvento.getId())).withSelfRel(),
+    //             WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EventoController.class).buscarRegistro()).withRel("eventos"));
+    //     return entityModel;        
+    // }
+
     @PostMapping
-    public EntityModel<EventoMascota> createRegistro(@RequestBody EventoMascota mascota) {
+    public ResponseEntity<EntityModel<EventoMascota>> createRegistro(@RequestBody EventoMascota mascota) {
         EventoMascota createdEvento = eventoService.createRegistro(mascota);
         EntityModel<EventoMascota> entityModel = EntityModel.of(createdEvento,
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EventoController.class).buscarId(createdEvento.getId())).withSelfRel(),
-                WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EventoController.class).buscarRegistro()).withRel("eventos"));
-        return entityModel;        
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EventoController.class).buscarId(createdEvento.getId())).withSelfRel(),
+            WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(EventoController.class).buscarRegistro()).withRel("eventos"));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(entityModel); // Aquí aseguramos el 201 Created
     }
 
     @DeleteMapping("/{id}")

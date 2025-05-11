@@ -3,7 +3,11 @@ package evento_mascota.microservicio_mascota.service;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.aspectj.lang.annotation.After;
@@ -15,6 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import evento_mascota.microservicio_mascota.model.EventoMascota;
 import evento_mascota.microservicio_mascota.repository.EventoRepository;
+import java.util.Optional;
+import java.util.List;
+
 
 
 @ExtendWith(MockitoExtension.class)
@@ -53,4 +60,19 @@ public class testServiceEvento {
         assertEquals(eventoMascota.getTipo_mascota(), resultado.getTipo_mascota());
     }
     
+
+    @Test
+    public void findEventoById() {
+        EventoMascota eventoMascota = new EventoMascota(3L, "evento3", "2023-10-03", "participante3", "conejo");
+        when(eventoRepository.findById(3L)).thenReturn(Optional.of(eventoMascota));
+
+        Optional<EventoMascota> encontrado = serviceImplementation.buscarId(3L);
+        assertTrue(encontrado.isPresent());
+        assertEquals("evento3", encontrado.get().getNombre());
+        assertEquals("2023-10-03", encontrado.get().getFecha());
+
+        when(eventoRepository.findById(4L)).thenReturn(Optional.empty());
+        Optional<EventoMascota> noEncontrado = serviceImplementation.buscarId(4L);
+        assertTrue(noEncontrado.isEmpty());
+    }
 }
